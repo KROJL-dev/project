@@ -6,12 +6,18 @@ import {
   DialogTitle,
   DialogFooter,
   DialogTrigger,
-} from '@/shared/ui/dialog'
-import { Input } from '@/shared/ui/input'
-import { Button } from '@/shared/ui/button'
-import { Textarea } from '@/shared/ui/textarea'
-import { Label } from '@/shared/ui/label'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/shared/ui/select'
+} from '@/shared/ui/molecules/dialog'
+import { Input } from '@/shared/ui/atoms/input'
+import { Button } from '@/shared/ui/atoms/button'
+import { Textarea } from '@/shared/ui/atoms/textarea'
+import { Label } from '@/shared/ui/atoms/label'
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from '@/shared/ui/molecules/select'
 
 import type { Application, Statuses } from '@/entities/applications/model/type' // адаптируй путь под проект
 import { postApplication } from '../api/postApplication'
@@ -33,7 +39,7 @@ export function CreateApplicationModal() {
   const handleSubmit = async () => {
     if (!company.trim() || !position.trim()) return
 
-    const newApp: Omit<Application, 'id' | 'order'> = {
+    const newApp: Omit<Application, 'id' | 'order' | 'createdAt'> = {
       company,
       position,
       status,

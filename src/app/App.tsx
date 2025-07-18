@@ -1,25 +1,34 @@
-import { Outlet } from '@tanstack/react-router'
+import { Outlet, useNavigate, useLocation } from '@tanstack/react-router'
 
-import { Toaster } from '@/shared/ui/sonner'
+import { Toaster } from '@/shared/ui/atoms/sonner'
 import { useAuthActions } from '@/features/auth/model/auth'
 import { useEffect, type FC, type PropsWithChildren } from 'react'
 import { LSAuthKeys, Tokens } from '@/shared/types'
 
 const App: FC<PropsWithChildren> = () => {
-  const { login } = useAuthActions()
+  const { login, setIsAuthChecked, logout } = useAuthActions()
+
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const [accessToken, refreshToken] = Tokens.map(key =>
+    const [accessToken, refreshToken, expiresIn] = Tokens.map(key =>
       window.localStorage.getItem(LSAuthKeys[key])
     )
 
+    console.log('here')
     if (
       accessToken &&
       accessToken !== 'undefined' &&
       refreshToken &&
       refreshToken !== 'undefined'
     ) {
-      login({ accessToken, refreshToken })
+      login({ accessToken, refreshToken, expiresIn: Number(expiresIn) })
+      if (location.pathname === '/') navigate({ to: '/dashboard' })
+      setIsAuthChecked(true)
+    } else {
+      logout(false)
+      navigate({ to: '/login' })
     }
   }, [])
 

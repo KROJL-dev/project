@@ -73,10 +73,11 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  pointer-events: all !important;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2.2em;
   line-height: 1.1;
 }
 

@@ -6,3 +6,8 @@ export const api = axios.create({
     'Content-Type': 'application/json',
   },
 })
+
+api.interceptors.request.use(async request => {
+  console.log('request', request)
+  return request
+})

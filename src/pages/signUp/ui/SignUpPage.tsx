@@ -3,11 +3,18 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Loader2 } from 'lucide-react'
-import { Input } from '@/shared/ui/input'
-import { Button } from '@/shared/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form'
+import { Input } from '@/shared/ui/atoms/input'
+import { Button } from '@/shared/ui/atoms/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/shared/ui/organisms/form'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/atoms/card'
 
 import { useSignUpMutation } from '@/features/auth/api/signUp'
 

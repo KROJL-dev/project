@@ -1,4 +1,4 @@
-import { CardContent } from '@/shared/ui/card'
+import { CardContent } from '@/shared/ui/atoms/card'
 import { useDroppable } from '@dnd-kit/core'
 
 export const DroppableColumn: React.FC<{ id: string; children: React.ReactNode }> = ({

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   DndContext,
   closestCenter,
@@ -10,6 +10,8 @@ import {
   type DragStartEvent,
 } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+
+import { toast } from 'sonner'
 
 import * as _ from 'lodash-es'
 
@@ -23,15 +25,24 @@ import {
 } from '@/entities/applications/model/store/useApplicationStore'
 import { CreateApplicationModal } from '@/entities/applications/ui/createApplicationModal'
 import { useFindDiffInColDueOrder } from '@/entities/applications/lib'
-import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card'
+import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/atoms/card'
 import { useApplicationsQuery, useApplicationStatusesQuery } from '@/entities/applications/model'
 
 import { DroppableColumn } from './DroppableColumn'
 import { SortableItem } from './SortableItem'
 import { patchApplicationOrder, patchApplicationStatus } from '@/entities/applications/api'
-import type { Statuses } from '@/entities/applications/model/type'
+import type { Application, Statuses } from '@/entities/applications/model/type'
+import ApplicationDrawer from './Drawer'
+import { Button } from '@/shared/ui/atoms/button'
+import AddMeetingLinkModal from '@/entities/applications/ui/addMeetingLinkModal'
 
+const TRIGGER_ADD_MEETING_LINK_MODAL_VALUE = ['INTERVIEW']
 const Applications = () => {
+  const [addOpenMeetingModal, setAddOpenMeetingModal] = useState<boolean>(false)
+  const [applicationIdForAddMeeting, setApplicationIdForAddMeeting] = useState<Application['id']>()
+  const [applicationForShowDetails, setApplicationForShowDetails] = useState<Application>()
+  const [destinationStatus, setDestinationStatus] = useState<string>()
+
   const { data: applicationStatusesQuery } = useApplicationStatusesQuery()
   const { data: applicationsQuery } = useApplicationsQuery()
 
@@ -64,6 +75,7 @@ const Applications = () => {
 
   const handleDragEnd = useCallback(
     async (event: DragEndEvent) => {
+      setDestinationStatus(undefined)
       const { active, over } = event
       setActiveId(null)
 
@@ -108,6 +120,10 @@ const Applications = () => {
           setColumns(oldColumns)
         }
       } else {
+        if (TRIGGER_ADD_MEETING_LINK_MODAL_VALUE.includes(targetColumn.title)) {
+          setDestinationStatus(targetColumn.title)
+          setApplicationIdForAddMeeting(application.id)
+        }
         const updatedApp = { ...application, status: targetColumn.id as Statuses }
 
         const newSource = sourceColumn.applications.filter(a => a.id !== active.id)
@@ -158,8 +174,27 @@ const Applications = () => {
     [columns, setActiveId, setColumns]
   )
 
+  useEffect(() => {
+    if (destinationStatus) {
+      toast.success('You can add a Meeting Link', {
+        description: <Button onClick={() => setAddOpenMeetingModal(true)}>Add</Button>,
+      })
+    }
+  }, [destinationStatus])
+
+  const onCloseApplicationDrawer = useCallback(() => setApplicationForShowDetails(undefined), [])
+  const onCloseAddMeetingModal = useCallback(() => setAddOpenMeetingModal(false), [])
   return (
     <>
+      <AddMeetingLinkModal
+        onClose={onCloseAddMeetingModal}
+        open={addOpenMeetingModal}
+        applicationId={applicationIdForAddMeeting}
+      />
+      <ApplicationDrawer
+        application={applicationForShowDetails}
+        onClose={onCloseApplicationDrawer}
+      />
       <CreateApplicationModal />
       <DndContext
         sensors={sensors}
@@ -167,9 +202,9 @@ const Applications = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-4 p-4 overflow-x-auto">
+        <div className="flex gap-4 overflow-x-auto pt-4">
           {columns.map(column => (
-            <Card key={column.id} className="w-64 min-h-[300px] flex flex-col">
+            <Card key={column.id} className="flex min-h-[300px] w-64 flex-col">
               <CardHeader>
                 <CardTitle>{column.title}</CardTitle>
               </CardHeader>
@@ -184,8 +219,12 @@ const Applications = () => {
                       <SortableItem
                         key={app.id}
                         id={app.id}
-                        title={`${app.position} @ ${app.company}`}
+                        title={`${app.position} at ${app.company}`}
                         activeId={activeId}
+                        onClick={e => {
+                          e.preventDefault()
+                          setApplicationForShowDetails(app)
+                        }}
                       />
                     ))}
                 </SortableContext>
@@ -198,7 +237,7 @@ const Applications = () => {
           {activeId ? (
             <Card className="w-60 p-2 shadow-lg">
               <CardContent>
-                {activeColumn?.position} @ {activeColumn?.company}
+                {activeColumn?.position} at {activeColumn?.company}
               </CardContent>
             </Card>
           ) : null}

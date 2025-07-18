@@ -4,10 +4,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useNavigate } from '@tanstack/react-router'
 
-import { Input } from '@/shared/ui/input'
-import { Button } from '@/shared/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
+import { Input } from '@/shared/ui/atoms/input'
+import { Button } from '@/shared/ui/atoms/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/shared/ui/organisms/form'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/atoms/card'
 
 import { validationSchema } from '../model/validation.schema'
 import { useCallback, useEffect } from 'react'

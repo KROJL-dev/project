@@ -7,6 +7,18 @@ export type Application = {
   order: number
   link?: string
   notes?: string
+  meeting?: Meeting[]
+  createdAt: string
+}
+
+export type Meeting = {
+  id: string
+  title: string
+  date: string
+  time: string
+  link?: string
+  notes?: string
+  status?: Statuses
 }
 
 export type Column = {

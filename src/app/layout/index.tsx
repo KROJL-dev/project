@@ -1,4 +1,4 @@
-import type { FC, PropsWithChildren } from 'react'
+import { useCallback, type FC, type PropsWithChildren } from 'react'
 
 import { Link } from '@tanstack/react-router'
 import {
@@ -7,8 +7,8 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from '@/shared/ui/navigation-menu'
-import { Button } from '@/shared/ui/button'
+} from '@/shared/ui/organisms/navigation-menu'
+import { Button } from '@/shared/ui/atoms/button'
 
 import { getAuthActions } from '@/features/auth/model/auth'
 
@@ -20,9 +20,13 @@ const navigationMenuItems = [
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { logout } = getAuthActions()
+
+  const onClickLogOut = useCallback(() => logout(), [logout])
+
   return (
-    <>
-      <NavigationMenu className="!max-w-none sticky top-[0] block flex w-[100vw] justify-between px-[2rem] py-[1rem]">
+    <div className="flex h-[100vh] w-[100vw]">
+      <NavigationMenu className="!max-w-[260px] top-[0] flex w-[200px] px-[2rem] py-[1rem]">
+        <h1 className="mb-8">Jobs_Tracker</h1>
         <NavigationMenuList>
           {navigationMenuItems.map(item => (
             <NavigationMenuItem key={item.title}>
@@ -34,10 +38,12 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
             </NavigationMenuItem>
           ))}
         </NavigationMenuList>
-        <Button onClick={logout}>Log Out</Button>
+        <Button onClick={onClickLogOut} className="mt-auto">
+          Log Out
+        </Button>
       </NavigationMenu>
-      {children}
-    </>
+      <div className="px-4">{children}</div>
+    </div>
   )
 }
 

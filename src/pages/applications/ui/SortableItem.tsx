@@ -1,16 +1,20 @@
-import { useMemo } from 'react'
+import { useMemo, type MouseEventHandler } from 'react'
+import { GripVertical } from 'lucide-react'
 
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
 import type { UniqueIdentifier } from '@dnd-kit/core'
 
-import { Card, CardContent } from '@/shared/ui/card'
+import { Card, CardContent } from '@/shared/ui/atoms/card'
+import { Button } from '@/shared/ui/atoms/button'
+import React from 'react'
 
 export const SortableItem: React.FC<{
   id: string
   title: string
   activeId: UniqueIdentifier | null
-}> = ({ id, title, activeId }) => {
+  onClick?: MouseEventHandler<HTMLButtonElement>
+}> = React.memo(({ id, title, activeId, onClick }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
   })
@@ -27,14 +31,16 @@ export const SortableItem: React.FC<{
   const isPlaceholder = useMemo(() => activeId === id, [activeId, id])
 
   return (
-    <Card
-      ref={setNodeRef}
-      className={`mb-2 cursor-grab p-2 ${isPlaceholder ? 'border border-dashed bg-gray-200' : ''}`}
-      style={style}
-      {...attributes}
-      {...listeners}
-    >
-      <CardContent className="p-0">{title}</CardContent>
-    </Card>
+    <>
+      <Card className={`mb-2 p-2 ${isPlaceholder ? 'border border-dashed bg-gray-200' : ''}`}>
+        <CardContent className="flex items-center gap-2 p-0">
+          <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+            <GripVertical className="cursor-grab text-muted-foreground" />
+          </div>
+          {title}
+        </CardContent>
+        <Button onClick={onClick}>{'->'}</Button>
+      </Card>
+    </>
   )
-}
+})
