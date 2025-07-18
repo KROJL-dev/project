@@ -14,12 +14,12 @@ jobs:
 
       - name: Debug
         run: ls -la pnpm-lock.yaml
-        
+
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
           run_install: false
-          version: 8
+          version: 9.5.0
       
       - name: Install Node.js
         uses: actions/setup-node@v4
