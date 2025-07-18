@@ -32,7 +32,7 @@ export const SortableItem: React.FC<{
 
   return (
     <>
-      <Card className={`mb-2 p-2 ${isPlaceholder ? 'border border-dashed bg-gray-200' : ''}`}>
+      <Card className={`mb-2 p-2 min-w-[154px] max-w-[154px] ${isPlaceholder ? 'border border-dashed bg-gray-200' : ''}`}>
         <CardContent className="flex items-center gap-2 p-0">
           <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
             <GripVertical className="cursor-grab text-muted-foreground" />

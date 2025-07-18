@@ -184,6 +184,8 @@ const Applications = () => {
 
   const onCloseApplicationDrawer = useCallback(() => setApplicationForShowDetails(undefined), [])
   const onCloseAddMeetingModal = useCallback(() => setAddOpenMeetingModal(false), [])
+
+ 
   return (
     <>
       <AddMeetingLinkModal
@@ -202,19 +204,21 @@ const Applications = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-4 overflow-x-auto pt-4">
+        <div className="flex gap-4 pt-4 flex-1">
           {columns.map(column => (
             <Card key={column.id} className="flex min-h-[300px] w-64 flex-col">
               <CardHeader>
                 <CardTitle>{column.title}</CardTitle>
+                <div className='w-full border-[1px] border-[var(--primary)] border-solid'/>
               </CardHeader>
+               
               <DroppableColumn id={column.id}>
                 <SortableContext
                   items={column.applications.map(a => a.id)}
                   strategy={verticalListSortingStrategy}
                 >
                   {column.applications
-                    .sort((applicationA, applicationB) => applicationA.order - applicationB.order)
+                    .sort((applicationA, applicationB) => applicationA.order - applicationB.order).filter(application=> application.id !== activeId)
                     .map(app => (
                       <SortableItem
                         key={app.id}
@@ -235,11 +239,14 @@ const Applications = () => {
 
         <DragOverlay>
           {activeId ? (
-            <Card className="w-60 p-2 shadow-lg">
-              <CardContent>
-                {activeColumn?.position} at {activeColumn?.company}
-              </CardContent>
-            </Card>
+            <SortableItem
+            key={activeColumn?.id}
+            id={activeColumn?.id || ''}
+            title={`${activeColumn?.position} at ${activeColumn?.company}`}
+            activeId={activeId}
+            
+          />
+             
           ) : null}
         </DragOverlay>
       </DndContext>

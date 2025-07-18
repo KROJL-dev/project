@@ -17,7 +17,10 @@ function NavigationMenu({
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
       data-viewport={viewport}
-      className={cn('group/navigation-menu relative flex max-w-max flex-1 flex-col', className)}
+      className={cn(
+        'group/navigation-menu relative flex max-w-max flex-1 flex-col',
+        className
+      )}
       {...props}
     >
       {children}
@@ -34,7 +37,7 @@ function NavigationMenuList({
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
       className={cn(
-        'group flex flex-1 list-none flex-col items-center justify-center gap-1',
+        'group flex flex-1 list-none flex-col justify-center gap-1',
         className
       )}
       {...props}
