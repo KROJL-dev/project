@@ -1,5 +1,5 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { memo, type FC, type ComponentProps } from 'react'
+import { memo, type ComponentProps } from 'react'
 import { XIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
