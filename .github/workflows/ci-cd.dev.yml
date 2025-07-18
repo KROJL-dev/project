@@ -9,13 +9,6 @@ jobs:
     name: Build 
     runs-on: ubuntu-latest
     steps: 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
-          cache: 'pnpm'
-
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -24,6 +17,12 @@ jobs:
         with:
           version: 8
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
