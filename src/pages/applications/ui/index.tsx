@@ -183,6 +183,7 @@ const Applications = () => {
   }, [destinationStatus])
 
   const onCloseApplicationDrawer = useCallback(() => setApplicationForShowDetails(undefined), [])
+  
   const onCloseAddMeetingModal = useCallback(() => setAddOpenMeetingModal(false), [])
 
  
