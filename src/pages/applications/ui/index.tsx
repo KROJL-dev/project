@@ -25,7 +25,7 @@ import {
 } from '@/entities/applications/model/store/useApplicationStore'
 import { CreateApplicationModal } from '@/entities/applications/ui/createApplicationModal'
 import { useFindDiffInColDueOrder } from '@/entities/applications/lib'
-import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/atoms/card'
+import { Card, CardHeader, CardTitle } from '@/shared/ui/atoms/card'
 import { useApplicationsQuery, useApplicationStatusesQuery } from '@/entities/applications/model'
 
 import { DroppableColumn } from './DroppableColumn'
