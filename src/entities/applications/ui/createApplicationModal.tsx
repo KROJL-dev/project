@@ -29,8 +29,7 @@ const statusOptions: Statuses[] = ['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED', 
 export function CreateApplicationModal() {
   const [open, setOpen] = useState<boolean>(false)
   const queryClient = useQueryClient()
- 
- 
+
   const createApplication = async (_: null, formData: FormData) => {
     const company = formData.get('company') as string
     const position = formData.get('position') as string
@@ -54,9 +53,8 @@ export function CreateApplicationModal() {
       queryKey: [ApplicationQueryKeys.applications],
     })
 
- 
     setOpen(false)
-    
+
     return null
   }
 
@@ -72,25 +70,16 @@ export function CreateApplicationModal() {
           <DialogTitle>New Application</DialogTitle>
         </DialogHeader>
 
-       
         <form action={formAction}>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="company">Company</Label>
-              <Input
-                id="company"
-                name="company"
-              
-              />
+              <Input id="company" name="company" />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="position">Position</Label>
-              <Input
-                id="position"
-                name="position"
-                
-              />
+              <Input id="position" name="position" />
             </div>
 
             <div className="grid gap-2">
@@ -107,26 +96,18 @@ export function CreateApplicationModal() {
                   ))}
                 </SelectContent>
               </Select>
-       
-              <input type="hidden" name="status"   />
+
+              <input type="hidden" name="status" />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="link">Link</Label>
-              <Input
-                id="link"
-                name="link"
-               
-              />
+              <Input id="link" name="link" />
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="notes">Notes</Label>
-              <Textarea
-                id="notes"
-                name="notes"
-                 
-              />
+              <Textarea id="notes" name="notes" />
             </div>
           </div>
 
@@ -134,7 +115,7 @@ export function CreateApplicationModal() {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={ isPending}>
+            <Button type="submit" disabled={isPending}>
               {isPending ? 'Creating...' : 'Create'}
             </Button>
           </DialogFooter>

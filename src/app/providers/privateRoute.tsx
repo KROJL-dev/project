@@ -15,16 +15,12 @@ const PrivateRoute: FC<PropsWithChildren> = ({ children }) => {
     if (isAuthChecked) {
       if (!isUserAuthorized) {
         logout()
-        navigate({ to: '/login' })
 
-        // window.location.pathname = '/login'
+        navigate({ to: '/login' })
       }
     }
   }, [isAuthChecked, isUserAuthorized])
 
-  if (!isUserAuthorized) {
-    navigate({ to: '/login' })
-  }
   return <Layout>{children}</Layout>
 }
 export default PrivateRoute

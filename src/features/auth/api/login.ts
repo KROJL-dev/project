@@ -23,6 +23,7 @@ const onSuccess = (data: SignUpResponse) => {
     const { login } = getAuthActions()
 
     login(data)
+
     redirect({ to: '/dashboard' })
   }
 }

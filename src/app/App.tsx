@@ -1,7 +1,7 @@
 import { Outlet, useNavigate, useLocation } from '@tanstack/react-router'
 
 import { Toaster } from '@/shared/ui/atoms/sonner'
-import { useAuthActions } from '@/features/auth/model/auth'
+import { useAuthActions, useIsUserAuthorized } from '@/features/auth/model/auth'
 import { useEffect, type FC, type PropsWithChildren } from 'react'
 import { LSAuthKeys, Tokens } from '@/shared/types'
 
@@ -16,7 +16,6 @@ const App: FC<PropsWithChildren> = () => {
       window.localStorage.getItem(LSAuthKeys[key])
     )
 
-    console.log('here')
     if (
       accessToken &&
       accessToken !== 'undefined' &&

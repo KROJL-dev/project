@@ -23,9 +23,9 @@ const signUp = async (data: SignUpRequest): Promise<SignUpResponse> => {
 
 const onSuccess = (data: SignUpResponse) => {
   if (data) {
-    console.log('data')
     const { login } = getAuthActions()
     login(data)
+
     window.location.pathname = '/dashboard'
   }
   toast.success("You're in! Welcome to the team 🎉", {

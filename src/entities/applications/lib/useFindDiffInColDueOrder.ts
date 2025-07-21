@@ -15,6 +15,5 @@ export const useFindDiffInColDueOrder = (oldCol: Column, newCol: Column): string
     }
   })
 
-  console.log('changedIds,', changedIds)
   return changedIds
 }

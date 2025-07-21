@@ -2,7 +2,7 @@ import type { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useNavigate } from '@tanstack/react-router'
+import { useLocation, useNavigate } from '@tanstack/react-router'
 
 import { Input } from '@/shared/ui/atoms/input'
 import { Button } from '@/shared/ui/atoms/button'
@@ -22,7 +22,9 @@ import { useLoginMutation } from '@/features/auth/api/login'
 import { useIsUserAuthorized } from '@/features/auth/model/auth'
 
 const LoginPage = () => {
+  const location = useLocation()
   const navigate = useNavigate()
+
   const isUserAuthorized = useIsUserAuthorized()
   const { mutate: login } = useLoginMutation()
 
@@ -49,7 +51,7 @@ const LoginPage = () => {
     if (isUserAuthorized) {
       navigate({ to: '/dashboard' })
     }
-  }, [isUserAuthorized, navigate])
+  }, [isUserAuthorized])
 
   return (
     <div className="flex h-full items-center justify-center bg-gray-100 p-4">
