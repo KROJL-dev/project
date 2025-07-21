@@ -22,7 +22,7 @@ import { useLoginMutation } from '@/features/auth/api/login'
 import { useIsUserAuthorized } from '@/features/auth/model/auth'
 
 const LoginPage = () => {
-  const location = useLocation()
+ 
   const navigate = useNavigate()
 
   const isUserAuthorized = useIsUserAuthorized()

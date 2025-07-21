@@ -1,0 +1,21 @@
+#!/bin/sh
+
+echo "🔍 Checking staged JS/TS files..."
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|ts|tsx)$')
+
+if [ -z "$FILES" ]; then
+  echo "No JS/TS files to check."
+  exit 0
+fi
+
+echo "Running Biome..."
+pnpm lint $FILES || exit 1
+
+echo "Type-checking with tsc..."
+pnpm tsc --noEmit || exit 1
+
+echo "Running tests..."
+pnpm test || exit 1
+
+echo "✅ All checks passed. Proceeding with commit."
