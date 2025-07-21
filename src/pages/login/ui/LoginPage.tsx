@@ -2,7 +2,7 @@ import type { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useLocation, useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 
 import { Input } from '@/shared/ui/atoms/input'
 import { Button } from '@/shared/ui/atoms/button'
@@ -22,7 +22,6 @@ import { useLoginMutation } from '@/features/auth/api/login'
 import { useIsUserAuthorized } from '@/features/auth/model/auth'
 
 const LoginPage = () => {
- 
   const navigate = useNavigate()
 
   const isUserAuthorized = useIsUserAuthorized()
