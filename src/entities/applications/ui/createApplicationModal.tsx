@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useActionState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/shared/ui/molecules/select'
 
-import type { Application, Statuses } from '@/entities/applications/model/type' // адаптируй путь под проект
+import type { Application, Statuses } from '@/entities/applications/model/type'
 import { postApplication } from '../api/postApplication'
 import { useQueryClient } from '@tanstack/react-query'
 import { ApplicationQueryKeys } from '../model/queries/queryKeys'
@@ -28,38 +28,39 @@ const statusOptions: Statuses[] = ['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED', 
 
 export function CreateApplicationModal() {
   const [open, setOpen] = useState<boolean>(false)
-
   const queryClient = useQueryClient()
-  const [company, setCompany] = useState<string>('')
-  const [position, setPosition] = useState<string>('')
-  const [status, setStatus] = useState<Statuses>('APPLIED')
-  const [link, setLink] = useState<string>('')
-  const [notes, setNotes] = useState<string>('')
+ 
+ 
+  const createApplication = async (_: null, formData: FormData) => {
+    const company = formData.get('company') as string
+    const position = formData.get('position') as string
+    const status = formData.get('status') as Statuses
+    const link = formData.get('link') as string
+    const notes = formData.get('notes') as string
 
-  const handleSubmit = async () => {
-    if (!company.trim() || !position.trim()) return
+    if (!company.trim() || !position.trim()) return null
 
     const newApp: Omit<Application, 'id' | 'order' | 'createdAt'> = {
       company,
       position,
       status,
-      // или кастомная логика
       link: link || undefined,
       notes: notes || undefined,
     }
 
-    // onCreate(newApp)
-    setOpen(false)
-    setCompany('')
-    setPosition('')
-    setStatus('APPLIED')
-    setLink('')
-    setNotes('')
     await postApplication(newApp)
+
     queryClient.invalidateQueries({
       queryKey: [ApplicationQueryKeys.applications],
     })
+
+ 
+    setOpen(false)
+    
+    return null
   }
+
+  const [_, formAction, isPending] = useActionState(createApplication, null)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -71,52 +72,73 @@ export function CreateApplicationModal() {
           <DialogTitle>New Application</DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
-          <div className="grid gap-2">
-            <Label htmlFor="company">Company</Label>
-            <Input id="company" value={company} onChange={e => setCompany(e.target.value)} />
+       
+        <form action={formAction}>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="company">Company</Label>
+              <Input
+                id="company"
+                name="company"
+              
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="position">Position</Label>
+              <Input
+                id="position"
+                name="position"
+                
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Status</Label>
+              <Select name="status">
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  {statusOptions.map(s => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+       
+              <input type="hidden" name="status"   />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="link">Link</Label>
+              <Input
+                id="link"
+                name="link"
+               
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea
+                id="notes"
+                name="notes"
+                 
+              />
+            </div>
           </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="position">Position</Label>
-            <Input id="position" value={position} onChange={e => setPosition(e.target.value)} />
-          </div>
-
-          <div className="grid gap-2">
-            <Label>Status</Label>
-            <Select value={status} onValueChange={value => setStatus(value as Statuses)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                {statusOptions.map(s => (
-                  <SelectItem key={s} value={s}>
-                    {s}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="link">Link</Label>
-            <Input id="link" value={link} onChange={e => setLink(e.target.value)} />
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="notes">Notes</Label>
-            <Textarea id="notes" value={notes} onChange={e => setNotes(e.target.value)} />
-          </div>
-        </div>
-
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} disabled={!company || !position}>
-            Create
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={ isPending}>
+              {isPending ? 'Creating...' : 'Create'}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

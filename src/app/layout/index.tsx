@@ -31,7 +31,10 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
           {navigationMenuItems.map(item => (
             <NavigationMenuItem key={item.title}>
               <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                <Link to={item.href} className="!text-[var(--color-text)] !flex-1 !w-[200px] !block mt-2">
+                <Link
+                  to={item.href}
+                  className="!text-[var(--color-text)] !flex-1 !w-[200px] !block mt-2"
+                >
                   {item.title}
                 </Link>
               </NavigationMenuLink>
