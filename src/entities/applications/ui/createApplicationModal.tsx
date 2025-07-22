@@ -131,17 +131,13 @@ export function CreateApplicationModal() {
             <div className="grid gap-2">
               <Label htmlFor="link">Link</Label>
               <Input id="link" {...register('link')} />
-              {errors.link && (
-                <span className="text-sm text-red-500">{errors.link.message}</span>
-              )}
+              {errors.link && <span className="text-sm text-red-500">{errors.link.message}</span>}
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="notes">Notes</Label>
               <Textarea id="notes" {...register('notes')} />
-              {errors.notes && (
-                <span className="text-sm text-red-500">{errors.notes.message}</span>
-              )}
+              {errors.notes && <span className="text-sm text-red-500">{errors.notes.message}</span>}
             </div>
           </div>
 
