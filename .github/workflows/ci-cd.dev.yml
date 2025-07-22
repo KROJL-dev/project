@@ -56,7 +56,8 @@ jobs:
       - name: Debug secrets
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-        run: echo "Bucket: \$AWS_S3_BUCKET"
+        run: 'echo "Bucket: $AWS_S3_BUCKET"'
+
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
