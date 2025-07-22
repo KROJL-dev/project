@@ -14,20 +14,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Debug
-        run: ls -la pnpm-lock.yaml
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-          version: 9.5.0
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.5.0
+          run_install: false
 
       - name: Cache pnpm store
         uses: actions/cache@v4
@@ -43,29 +40,21 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      - name: Cache build
-        uses: actions/cache@v4
-        with:
-          path: dist
-          key: ${{ runner.os }}-build-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-
-
       - name: Build project
         run: pnpm build
 
-      - name: Install AWS CLI
+      - name: Ensure node_modules not in dist
         run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
+          if [ -d "dist/node_modules" ]; then
+            echo "node_modules found in dist! Aborting."
+            exit 1
+          fi
 
-      - name: Upload to S3 via AWS CLI
-        run: aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} --delete
+      - name: Upload to S3
+        run: |
+          aws s3 sync dist/ s3://${{ secrets.AWS_S3_BUCKET }} --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-
-
